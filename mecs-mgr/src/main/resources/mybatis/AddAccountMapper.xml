@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="cn.com.newloading.dao.AddAccountLogMapper">
+	<insert id="insertAccount" parameterType="cn.com.newloading.bean.Account">	
+		INSERT INTO T_ACCOUNT (ACC_CA_NUMBER,ACC_TYPE,ACC_REMARK,ACC_MONEY,ACC_MEMO,ACC_CREATE_TIME) VALUES
+		(#{cardNum},#{accType},#{accDescribe},#{accMoney},NUll,SYSDATE())
+	</insert>
+</mapper>

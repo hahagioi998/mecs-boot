@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="cn.com.newloading.dao.RechargeMapper">
+
+	<select id="checkAccountOrderNum" resultType="java.lang.String">
+		SELECT AO_ID FROM T_ACCOUNT_ORDER WHERE AO_NUMBER = #{aoNum}
+	</select>
+
+	<insert id="addAccountOrder">
+		INSERT INTO T_ACCOUNT_ORDER (AO_NUMBER,AO_NAME,AO_PAY,AO_REMARK,AO_CA_NUMBER,AO_CREATE_TIME,AO_FINISH_TIME)
+		VALUES(#{aoNum},#{aoName},#{aoPay},#{aoRemark},#{cardNum},SYSDATE(),SYSDATE())
+	</insert>
+
+	<update id="changeCardBalance">
+		UPDATE T_CARD SET CA_BALANCE = #{aoPay}
+		WHERE CA_NUMBER = #{cardNum}
+	</update>
+	
+	<insert id="addAccount">
+		INSERT INTO T_ACCOUNT (ACC_CA_NUMBER,ACC_TYPE,ACC_REMARK,ACC_MONEY,ACC_MEMO,ACC_CREATE_TIME)
+		VALUES(#{cardNum},0,#{accRemark},#{accMoney},NULL,SYSDATE())
+	</insert>
+
+	<insert id="addFrontLog" parameterType="cn.com.newloading.bean.Log">
+		INSERT INTO
+		T_FRONTLOG (FL_US_ID,FL_TYPE,FL_REMARK,FL_CREATE_TIME)
+		VALUES
+		(#{logUserId},#{logType},#{logRemark},SYSDATE())
+	</insert>
+
+	<select id="getUserIdByCrdNum" resultType="java.lang.String">
+		SELECT CA_USER_ID FROM T_CARD WHERE CA_NUMBER = #{cardNum}
+	</select>
+	
+	<select id="getBalanceByCardNum" resultType="java.lang.String">
+		SELECT CA_BALANCE FROM T_CARD WHERE CA_NUMBER = #{cardNum}
+	</select>
+
+</mapper>

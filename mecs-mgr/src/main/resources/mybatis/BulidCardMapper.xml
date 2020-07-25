@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="cn.com.newloading.dao.BuildCardMapper">
+
+	<select id="queryCardNumber" resultType="java.lang.String">
+		SELECT min(CA_NUMBER) FROM T_CARD WHERE CA_STATE=#{cardState}
+	</select>
+	
+	<select id="queryCardIdByCardNumberAndState" resultType="java.lang.String">
+   		SELECT CA_ID FROM T_CARD WHERE CA_NUMBER=#{cardNumber} AND CA_STATE =#{cardState}
+   	</select>
+	<insert id="buildUser" keyProperty="userId" parameterType="cn.com.newloading.bean.User" >
+		INSERT INTO T_USER (US_NAME,US_SEX,US_AGE,US_BLOODTYPE,US_BIRTHDAY,US_PHONE,US_ADDRESS,US_NATIVEPLACE,US_MEMO,US_CREATE_TIME,US_UPDATE_TIME)  
+		VALUES(#{userName},#{userSex},#{userAge},#{userBloodType},#{userBirthday},#{userPhone},#{userAddress},#{userNativePlace},#{userMemo},SYSDATE(),SYSDATE())
+	</insert>
+
+   	
+   	<select id="queryBuildCardMoney" resultType="java.lang.Integer">
+   		SELECT DI_CODE FROM T_DICT WHERE DI_TYPE=#{buildcard}
+   	</select>
+	
+	<update id="buildCard">
+		UPDATE T_CARD SET CA_USER_ID=#{userId},CA_STATE=#{cardState},CA_SELL_ADMIN_ID=#{sellAdminId}, CA_BALANCE=#{balance},CA_UPDATE_DATE = SYSDATE() WHERE CA_ID=#{carId}
+	</update>
+</mapper>

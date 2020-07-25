@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" 
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="cn.com.newloading.dao.AccountMapper">
+	<resultMap type="cn.com.newloading.bean.Account" id="accountResultMap">
+		<result column="ACC_ID" property="accId" />
+		<result column="ACC_CA_NUMBER" property="cardNum" />
+		<result column="DI_NAME" property="accType" />
+		<result column="ACC_REMARK" property="accDescribe" />
+		<result column="ACC_MONEY" property="accMoney" />
+		<result column="ACC_TYPE" property="accMemo" />
+		<result column="TIMEE" property="accCtime" />
+	</resultMap>
+		<select id="getAccountCountByCard" resultType="java.lang.Integer">
+		     SELECT COUNT(*)  FROM  T_ACCOUNT WHERE  ACC_CA_NUMBER = #{cardNum}
+				<if test="beginTime !=null and beginTime != ''">
+					AND ACC_CREATE_TIME &gt;= CONCAT(#{beginTime},' 00:00:00')
+				</if>
+				<if test="overTime !=null and overTime != ''">
+					AND ACC_CREATE_TIME &lt;= CONCAT(#{overTime},' 23:59:59')
+				</if>
+				<if test="type !=null and type != ''">
+					AND ACC_TYPE  = #{type}
+				</if>
+		</select>
+		<select id="getAccountByCard" resultMap="accountResultMap">
+			SELECT 
+			 A.ACC_ID,A.ACC_CREATE_TIME  TIMEE,
+			 A.ACC_CA_NUMBER , D.DI_NAME ,A.ACC_REMARK,A.ACC_MONEY,A.ACC_MEMO ,A.ACC_TYPE
+			FROM 
+			 T_ACCOUNT A INNER JOIN T_DICT D ON A.ACC_TYPE = D.DI_CODE	
+			WHERE 
+			 A.ACC_CA_NUMBER = #{cardNum}
+			AND 
+			 D.DI_TYPE = 'ACCOUNTTYPE'
+				<if test="beginTime !=null and beginTime != ''">
+					AND A.ACC_CREATE_TIME &gt;= CONCAT(#{beginTime},' 00:00:00')
+				</if>
+				<if test="overTime !=null and overTime != ''">
+					AND A.ACC_CREATE_TIME &lt;= CONCAT(#{overTime},' 23:59:59')
+				</if>
+				<if test="type !=null and type != ''">
+					AND A.ACC_TYPE  = #{type}
+				</if>
+			ORDER BY
+			 A.ACC_CREATE_TIME DESC
+		</select>
+		<select id="getBalanceByCard" resultType="java.lang.String">
+		     SELECT  CA_BALANCE FROM  T_CARD WHERE CA_NUMBER = #{cardNum}
+		</select>
+</mapper>
